@@ -1,5 +1,6 @@
 package com.balthazar.GymAI_Backend.user.service;
 
+import com.balthazar.GymAI_Backend.statics.consistency.service.ConsistencyStatisticsService;
 import com.balthazar.GymAI_Backend.user.entity.User;
 import com.balthazar.GymAI_Backend.user.repository.UserRepository;
 import lombok.AllArgsConstructor;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
     private final UserRepository repository;
+    private final ConsistencyStatisticsService consistencyStatisticsService;
 
     public User create(
             String name,
@@ -33,6 +35,10 @@ public class UserService {
                 avatar
         );
 
-        return repository.save(user);
+        User savedUser = repository.save(user);
+
+        consistencyStatisticsService.create(savedUser);
+
+        return savedUser;
     }
 }

@@ -1,3 +1,25 @@
 spring:
   application:
     name: GymAI_Backend
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/gym_ai
+    username: postgres
+    password: 123456
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
+
+jwt:
+  secret: ${JWT_SECRET:uma-chave-temporaria-bem-grande-123456789}
+  expiration: ${JWT_EXPIRATION:86400000}
+
+google:
+  client-id: ${GOOGLE_CLIENT_ID:}

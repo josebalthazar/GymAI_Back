@@ -66,7 +66,7 @@ public class ExerciseService {
         }
         exercise.alterar(
                 request.name(),
-                request.countSeries()
+                request.expectedSeries()
         );
         Exercise updatedExercise = exerciseRepository.save(exercise);
 

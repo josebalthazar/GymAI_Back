@@ -33,11 +33,13 @@ public class ConsistencyStatistics {
     }
 
     private ConsistencyStatistics(
+            User user,
             Integer currentStreak,
             Integer longestStreak,
             Integer expectedWorkouts,
             Integer completedWorkouts
     ) {
+        this.user = user;
         this.currentStreak = currentStreak;
         this.longestStreak = longestStreak;
         this.expectedWorkouts = expectedWorkouts;
@@ -45,7 +47,13 @@ public class ConsistencyStatistics {
     }
 
     public static ConsistencyStatistics create(User user) {
-        return new ConsistencyStatistics(0, 0, 0, 0);
+        return new ConsistencyStatistics(
+                user,
+                0,
+                0,
+                0,
+                0
+        );
     }
 
     public double getCompletionRate() {
