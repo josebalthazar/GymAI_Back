@@ -1,6 +1,7 @@
 package com.balthazar.GymAI_Backend.training.entity;
 
 import com.balthazar.GymAI_Backend.exercise.entity.Exercise;
+import com.balthazar.GymAI_Backend.user.entity.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 
@@ -18,13 +19,16 @@ public class Training {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
     private String name;
 
-    @ManyToMany
-    @JoinTable(
-            name = "training_exercise",
-            joinColumns = @JoinColumn(name = "training_id"),
-            inverseJoinColumns = @JoinColumn(name = "exercise_id")
+    @OneToMany(
+            mappedBy = "training",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
     )
     private List<Exercise> exercises = new ArrayList<>();
 
@@ -39,8 +43,16 @@ public class Training {
         this.dayOfWeeks = dayOfWeeks;
     }
 
+    protected Training() {
+    }
+
     public void alterar(String name, List<DayOfWeek> dayOfWeeks) {
         this.name = name;
         this.dayOfWeeks = dayOfWeeks;
+    }
+
+    @PrePersist
+    protected  void onCreate() {
+        this.createdAt = LocalDate.now();
     }
 }

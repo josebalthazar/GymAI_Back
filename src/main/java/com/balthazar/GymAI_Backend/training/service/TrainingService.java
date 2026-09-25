@@ -15,41 +15,47 @@ public class TrainingService {
     private final TrainingRepository repository;
     private final TrainingMapper mapper;
 
-    public TrainingResponse create (TrainingRequest request) {
+    public TrainingResponse create(TrainingRequest request) {
         if (repository.existsByName(request.name())) {
             throw new RuntimeException("Workout name already exists.");
         }
         Training newTraining = mapper.toEntity(request);
-        return mapper.toDTO(newTraining);
+        Training savedTraining = repository.save(newTraining);
+
+        return mapper.toDTO(savedTraining);
     }
 
     public TrainingResponse getById(Long id) {
-        if (!repository.existsById(id)) {
-            throw new RuntimeException("The training does not exist.");
-        }
         Training training = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("The training does not exist."));
+                .orElseThrow(() ->
+                        new RuntimeException("The training does not exist.")
+                );
         return mapper.toDTO(training);
     }
 
-    public TrainingResponse patch (Long id, TrainingRequest request) {
+    public TrainingResponse patch(Long id, TrainingRequest request) {
+
         Training training = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("The training does not exist."));
-        if (!repository.existsByName(request.name())) {
-            throw new RuntimeException("The training does not exist.");
+                .orElseThrow(() ->
+                        new RuntimeException("The training does not exist.")
+                );
+        if (repository.existsByNameAndIdNot(request.name(), id)) {
+            throw new RuntimeException("Workout name already exists.");
         }
         training.alterar(
                 request.name(),
                 request.dayOfWeeks()
         );
         Training updated = repository.save(training);
+
         return mapper.toDTO(updated);
     }
 
-    public void delete (Long id) {
-        if (!repository.existsById(id)){
-            throw new RuntimeException("The training does not exist.");
-        }
-        repository.deleteById(id);
+    public void delete(Long id) {
+        Training training = repository.findById(id)
+                .orElseThrow(() ->
+                        new RuntimeException("The training does not exist.")
+                );
+        repository.delete(training);
     }
 }

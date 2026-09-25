@@ -1,5 +1,6 @@
 package com.balthazar.GymAI_Backend.serie.dto.mapper;
 
+import com.balthazar.GymAI_Backend.exercise.entity.Exercise;
 import com.balthazar.GymAI_Backend.serie.dto.request.SerieRequest;
 import com.balthazar.GymAI_Backend.serie.dto.response.SerieResponse;
 import com.balthazar.GymAI_Backend.serie.entity.Serie;
@@ -21,14 +22,15 @@ public class SerieMapper {
         );
     }
 
-    public Serie toEntity(SerieRequest dto) {
-        if(dto == null){
-            return null;
-        }
+    public Serie toEntity(
+            SerieRequest dto,
+            Exercise exercise
+    ) {
         return new Serie(
                 dto.weight(),
                 dto.reps(),
-                dto.difficulty()
+                dto.difficulty(),
+                exercise
         );
     }
 }

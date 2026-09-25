@@ -20,23 +20,42 @@ public class Serie {
 
     private Integer reps;
 
+    @Enumerated(EnumType.STRING)
     private DifficultyEnum difficulty;
 
-    @ManyToOne
-    @JoinColumn(name = "exercise_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "exercise_id", nullable = false)
     private Exercise exercise;
 
     private LocalDate createdAt;
 
-    public Serie(Double weight, Integer reps, DifficultyEnum difficulty) {
+    public Serie(
+            Double weight,
+            Integer reps,
+            DifficultyEnum difficulty,
+            Exercise exercise
+    ) {
+        this.weight = weight;
+        this.reps = reps;
+        this.difficulty = difficulty;
+        this.exercise = exercise;
+    }
+
+    protected Serie() {
+    }
+
+    public void alterar(
+            Double weight,
+            Integer reps,
+            DifficultyEnum difficulty
+    ) {
         this.weight = weight;
         this.reps = reps;
         this.difficulty = difficulty;
     }
 
-    public void alterar(Double weight, Integer reps, DifficultyEnum difficulty) {
-        this.weight = weight;
-        this.reps = reps;
-        this.difficulty = difficulty;
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDate.now();
     }
 }

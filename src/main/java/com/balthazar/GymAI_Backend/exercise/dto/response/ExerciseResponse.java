@@ -9,8 +9,7 @@ import java.util.UUID;
 public record ExerciseResponse(
         UUID id,
         String name,
-        Integer countSeries,
-        List<Serie> series,
-        LocalDate updatedAt
+        Integer expectedSeries,
+        List<Serie> series
 ) {
 }

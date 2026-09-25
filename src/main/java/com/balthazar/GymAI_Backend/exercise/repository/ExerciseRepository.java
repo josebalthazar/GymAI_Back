@@ -9,5 +9,11 @@ import java.util.UUID;
 @Repository
 public interface ExerciseRepository extends JpaRepository<Exercise, UUID> {
 
-    boolean existsByName(String name);
+    boolean existsByNameAndTrainingId(String name, Long trainingId);
+
+    boolean existsByNameAndTrainingIdAndIdNot(
+            String name,
+            Long trainingId,
+            UUID id
+    );
 }
